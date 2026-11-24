@@ -60,7 +60,6 @@ Figure 3 illustrates how tighter membrane constraints (lower γ values) shift me
 - MATLAB with COBRA Toolbox
 - CPLEX or Gurobi solver
 - Model files in `../../1_Model_Construction/03_MAFBA_Models_Outputs/iML1515_Homogeneous/`
-- Helper functions from `../../1_Model_Construction/02_MATLAB_Build/`
 
 ### Step-by-Step
 

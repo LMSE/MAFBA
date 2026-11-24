@@ -1905,7 +1905,7 @@
       <parameter sboTerm="SBO:0000626" id="FB1N1000" value="-1000" constant="true"/>
       <parameter sboTerm="SBO:0000626" id="FB2N0" value="0" constant="true"/>
       <parameter sboTerm="SBO:0000625" id="FB3N0" value="0.484" constant="true"/>
-      <parameter sboTerm="SBO:0000625" id="FB4N7" value="6.86" constant="true"/>
+      <parameter sboTerm="SBO:0000625" id="FB4N7" value="6.2" constant="true"/>
       <parameter sboTerm="SBO:0000625" id="FB5N20" value="20" constant="true"/>
       <parameter sboTerm="SBO:0000625" id="FB6N30" value="30" constant="true"/>
       <parameter sboTerm="SBO:0000626" id="FB7N1000" value="1000" constant="true"/>

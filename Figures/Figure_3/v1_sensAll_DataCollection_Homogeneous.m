@@ -9,12 +9,36 @@
 
 % LOAD MODEL
 
+baseDir = fileparts(mfilename('fullpath'));
+repoRoot = fullfile(baseDir, '..', '..');
+addpath(fullfile(repoRoot, 'utils'));
+addpath(fullfile(repoRoot, '1_Model_Construction', '02_MATLAB_Build'));
+
 % Set up of the MAFBA model
 changeCobraSolver('gurobi'); %Using cplex !!Important to do this
 
 %%
 modelV = 0;
 dateVersion = 'MAFBA_homogeneous';
+if exist('ec_model', 'var') ~= 1
+    modelFiles = { ...
+        fullfile(repoRoot, '1_Model_Construction', '02_MATLAB_Build', 'output', ...
+            sprintf('prepared_iML1515_modelV%d_%s.mat', modelV, dateVersion)), ...
+        fullfile(repoRoot, '1_Model_Construction', '03_MAFBA_Models_Outputs', ...
+            ['iML1515_' dateVersion], 'model_OutputData', ...
+            sprintf('annotated_iML1515_irreversible_V%d_%s.xml', modelV, dateVersion))};
+    if ~any(cellfun(@isfile, modelFiles))
+        savedData = fullfile(repoRoot, 'data', 'outputs', 'iML1515_Homogeneous', 'dataFlux_Homogeneous.csv');
+        if isfile(savedData)
+            fprintf('Model %s not found. Plotting Figure 3 from saved data in %s\n', ...
+                dateVersion, fileparts(savedData));
+            run(fullfile(baseDir, 'Figure_3_fluxes_fromdata.m'));
+            return
+        else
+            error('Model %s and saved data %s not found.', dateVersion, savedData);
+        end
+    end
+end
 if exist('ec_model', 'var') == 1
     ec_model = setUp_GlucoseGrowth(ec_model,dateVersion,modelV);
 else
@@ -97,7 +121,7 @@ gamma_above = 0.3 + 0.7 * (linspace(0, 1, num_values_above).^2);
 % Combine the values
 gammaValues = [gamma_below, gamma_above];
 gammaValues = [1, 0.3, 0.25, 0.2, 0.15];
-atpm_values = [6.89];
+atpm_values = [6.2];
 
 % Define coefficient change factors
 change_factors = [1];
@@ -209,6 +233,7 @@ try
     for atpm_idx = 1:numel(atpm_values)
         atpm_val = atpm_values(atpm_idx);
         logging(sprintf('Processing ATPM Value: %.2f (%d/%d)', atpm_val, atpm_idx, numel(atpm_values)));
+        ec_model.lb(atpm_index) = atpm_val;
         ec_model.ub(atpm_index) = atpm_val;
         
         for f = 1:numel(gammaValues)
