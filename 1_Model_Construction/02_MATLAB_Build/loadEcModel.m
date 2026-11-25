@@ -1,6 +1,6 @@
 function [solutions, ec_models] = loadEcModel(gammas, varargin)
-    % Set up the MAFBA model solver (important to use CPLEX)
-    changeCobraSolver('ibm_cplex');
+    % Set up the MAFBA model solver
+    changeCobraSolver('gurobi');
     if ~exist('gammas', 'var')
        gammas = [1,0.25]; 
     end
@@ -8,7 +8,7 @@ function [solutions, ec_models] = loadEcModel(gammas, varargin)
     % Default values
     defaults = struct(...
         'modelV', 0, ...
-        'dateVersion', 'AlterOriginal', ...
+        'dateVersion', 'AlterDfv2', ...
         'saveMATLAB', 0, ...
         'saveSBML', 0, ...
         'opt', 1, ...
@@ -41,6 +41,7 @@ function [solutions, ec_models] = loadEcModel(gammas, varargin)
     % Construct paths
     baseDir = fileparts(mfilename('fullpath'));
     repoRoot = fullfile(baseDir, '..', '..');
+    addpath(fullfile(repoRoot, 'utils'));
     outputRoot = fullfile(repoRoot, '1_Model_Construction', '03_MAFBA_Models_Outputs', params.modelCode);
     modelsRoot = fullfile(outputRoot, 'models');
     attributesRoot = fullfile(outputRoot, 'attributes_spreadsheets');
@@ -82,6 +83,9 @@ function [solutions, ec_models] = loadEcModel(gammas, varargin)
         model = prepareModelfromAnnotations(model, attributesPath, true, savePath);
         generateModelExcel(input_path, attributesRoot, params.dateVersion);
     end
+
+    NGAM = 6.2;
+    model.lb(strcmp(model.rxns, 'ATPM')) = NGAM;
 
     % MAFBA Model Configuration
     addZYprot = 1;
@@ -162,7 +166,7 @@ function default_sigma = getDefaultSigma(modelV)
         case 1
             default_sigma = 14.018;
         case 0
-            default_sigma = 0.4048;
+            default_sigma = 0.5021;
         otherwise
             error('Invalid model version');
     end

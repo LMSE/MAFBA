@@ -88,6 +88,9 @@ else
     warning('No update Excel provided. Skipping updateModelFromExcel.');
 end
 
+NGAM = 6.2;
+model.lb(strcmp(model.rxns, 'ATPM')) = NGAM;
+
 if saveBool
     save(savePath, 'model');
     disp(['Model saved at: ', savePath]);

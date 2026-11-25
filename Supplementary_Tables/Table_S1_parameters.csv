@@ -1,0 +1,23 @@
+parameter,symbol,value,units,source
+Homogeneous approach reaction cost,w,3.54e-4,gDCW h mmol^-1,This study
+Heterogeneous approach average cost,w_hat,3.40e-4,gDCW h mmol^-1,This study
+Total protein concentration,TPC,0.32,gprotein gDCW^-1,Schmidt et al. (2016); Alter et al. (2021)
+Proteome cost for ribosomal fraction,w_R,0.169,h,Scott et al. (2010)
+Maximum proteome fraction,phiP_max,0.484,dimensionless,Scott et al. (2010)
+Maximum membrane proteome fraction,phiM_max,Variable (gamma x phiP_max),dimensionless,Schmidt et al. (2016); Milo et al. (2010)
+Membrane-to-total proteome ratio,gamma,Variable (0.1-1),dimensionless,This study
+Scaling factor for proteome cost,sigma,Variable,dimensionless,This study
+Turnover number (average; membrane),kcat_membrane,Variable,mmol gprotein^-1 h^-1,Sanchez et al. (2017); Bekiaris and Klamt (2020)
+Turnover number (average; cytosolic),kcat_cytosolic,Variable,mmol gprotein^-1 h^-1,Sanchez et al. (2017); Bekiaris and Klamt (2020)
+ATP maintenance flux (NGAM),v_ATP,6.2,mmol gDCW^-1 h^-1,This study
+Acetate threshold,lambda_ac,0.73,h^-1,Mori et al. (2016)
+Simulated maximum growth rate,lambda_max,1.0,h^-1,Mori et al. (2016); Scott et al. (2010)
+Offset for ribosomal proteome fraction,phiR_0,0.066,dimensionless,This study
+Offset for reaction proteome fraction,phiP_i0,0,dimensionless,This study
+Proteome fraction used by carbon uptake,w_Cm,Variable,gDCW h mmol^-1,This study
+Proteome fraction used by cytosolic reactions,w_Ec,Variable,gDCW h mmol^-1,This study
+Proteome fraction used by membrane-associated reactions,w_Em,Variable,gDCW h mmol^-1,This study
+Proteome fraction used by respiratory reactions,w_Er,Variable,gDCW h mmol^-1,This study
+Fraction of growth-independent proteome,phiQ,0.45,dimensionless,This study
+Proteome fraction for unsaturated enzymes,phiC_c,Variable (simulation output),dimensionless,This study
+Proteome fraction for carbon uptake enzymes,phiC_m,Variable (simulation output),dimensionless,This study

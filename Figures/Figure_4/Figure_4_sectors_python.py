@@ -31,35 +31,14 @@ def detect_acetate_threshold(table_data):
         return 0.0
 
     growth_col = resolve_column(table_data, "rx_BIOMASS_Ec_iML1515_WT_75p37M", "BIOMASS_Ec_iML1515_WT_75p37M")
-    memb_col = resolve_column(table_data, "rx_ATPS4rpp_f", "ATPS4rpp_f")
     acetate_col = resolve_column(table_data, "rx_EX_ac_e_f", "EX_ac_e_f")
 
     table_data = table_data.sort_values(by=growth_col).reset_index(drop=True)
     gr = table_data[growth_col].to_numpy()
-    memb = table_data[memb_col].to_numpy()
     ac = table_data[acetate_col].to_numpy()
 
-    if len(gr) < 2:
-        return float(gr[0]) if len(gr) == 1 else 0.0
-
-    with np.errstate(divide="ignore", invalid="ignore"):
-        slope = np.diff(memb) / np.diff(gr)
-
-    valid = slope[np.isfinite(slope)]
-    if valid.size == 0:
-        ac_idx = np.where(ac >= 0.01)[0]
-        return float(gr[ac_idx[0]]) if ac_idx.size else float(gr[0])
-
-    max_slope = valid.max()
-    for threshold, acetate_cutoff in [(0.01, 0.01), (0.05, 0.0), (0.2, 0.0)]:
-        memb_sat = np.where(slope <= max_slope * threshold)[0]
-        if memb_sat.size == 0:
-            continue
-        acetate_idx = np.where(ac[memb_sat] >= acetate_cutoff)[0]
-        if acetate_idx.size:
-            return float(gr[memb_sat[acetate_idx[0]]])
-
-    return float(gr[0])
+    ac_idx = np.where(ac >= 0.01)[0]
+    return float(gr[ac_idx[0]]) if ac_idx.size else float(gr[0])
 
 
 def plot_sectors(sectors_filename, data_filename, figure_prefix, output_folder):

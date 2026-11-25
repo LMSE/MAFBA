@@ -5,9 +5,9 @@ Code, data, and figure scripts for Membrane-Allocation Flux Balance Analysis (MA
 ## Layout
 
 - `1_Model_Construction/`: build and export model files
-- `2_Basic_Analysis/`: glucose sweeps, sectors, sensitivity, and FVA
 - `Figures/`: main-figure scripts
 - `Supplementary_Figures/`: supplementary-figure scripts
+- `Supplementary_Tables/`: Supplementary Table 1 (model parameters)
 - `data/`: inputs and staged outputs
 - `utils/`: shared helpers
 
@@ -20,7 +20,6 @@ Code, data, and figure scripts for Membrane-Allocation Flux Balance Analysis (MA
 ## Entry Points
 
 - Rebuild model assets from `1_Model_Construction/README.md`
-- Regenerate staged outputs from `2_Basic_Analysis/README.md`
 - Recreate figures from the scripts under `Figures/` and `Supplementary_Figures/`
 
 ## Main Model Input
