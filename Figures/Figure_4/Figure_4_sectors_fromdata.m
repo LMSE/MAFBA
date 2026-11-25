@@ -37,7 +37,6 @@ else
 end
 
 growth_col = resolve_column(tableData.Properties.VariableNames, {'rx_BIOMASS_Ec_iML1515_WT_75p37M', 'BIOMASS_Ec_iML1515_WT_75p37M'});
-atp_col = resolve_column(tableData.Properties.VariableNames, {'rx_ATPS4rpp_f', 'ATPS4rpp_f'});
 acetate_col = resolve_column(tableData.Properties.VariableNames, {'rx_EX_ac_e_f', 'EX_ac_e_f'});
 
 color = {sscanf('65AF65','%2x%2x%2x',[1 3])/255, ...
@@ -70,7 +69,7 @@ for f = 1:length(gamma_values)
         continue;
     end
     T = sortrows(T, growth_col);
-    gr_ac = detect_acetate_threshold(T, growth_col, atp_col, acetate_col);
+    gr_ac = detect_acetate_threshold(T, growth_col, acetate_col);
     
     if ismember('Change_Factor', tableSectors.Properties.VariableNames)
         S = tableSectors(abs(tableSectors.Gamma - gamma_val) < 1e-9 & abs(tableSectors.Change_Factor - change_factor) < 1e-9, :);
@@ -116,43 +115,13 @@ fprintf('\n✓ Figure 4 generation complete!\n');
 fprintf('  Total figures: %d gamma values × 3 formats = %d files\n', generated_count, generated_count * 3);
 
 
-function gr_ac = detect_acetate_threshold(T, growth_col, atp_col, acetate_col)
-    dif_v = diff(T.(atp_col));
-    dif_g = diff(T.(growth_col));
-    slope_v = dif_v ./ dif_g;
-    valid_slopes = slope_v(isfinite(slope_v));
-    if isempty(valid_slopes)
-        ac_idx = find(T.(acetate_col) >= 0.01, 1, 'first');
-        if isempty(ac_idx)
-            gr_ac = T.(growth_col)(1);
-        else
-            gr_ac = T.(growth_col)(ac_idx);
-        end
-        return;
+function gr_ac = detect_acetate_threshold(T, growth_col, acetate_col)
+    ac_idx = find(T.(acetate_col) >= 0.01, 1, 'first');
+    if isempty(ac_idx)
+        gr_ac = T.(growth_col)(1);
+    else
+        gr_ac = T.(growth_col)(ac_idx);
     end
-
-    m_s = max(valid_slopes);
-    thresholds = [0.01, 0.05, 0.2];
-    acetate_cutoffs = [0.01, 0, 0];
-    ac_t = [];
-
-    for i = 1:numel(thresholds)
-        memb_s = find(slope_v <= m_s * thresholds(i));
-        if isempty(memb_s)
-            continue;
-        end
-        t_i = find(T.(acetate_col)(memb_s) >= acetate_cutoffs(i), 1, 'first');
-        if ~isempty(t_i)
-            ac_t = memb_s(t_i);
-            break;
-        end
-    end
-
-    if isempty(ac_t)
-        ac_t = 1;
-    end
-
-    gr_ac = T.(growth_col)(ac_t);
 end
 
 
